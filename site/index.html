@@ -286,7 +286,7 @@
   /* ---- INSTALL NOTE ---- */
   .install-note {
     max-width: 480px;
-    margin: 0 auto;
+    margin: 0 auto 80px;
     padding: 20px 24px;
     border: 1px solid var(--cream-10);
     border-radius: 10px;
@@ -427,15 +427,16 @@
       <span class="dl-meta">macos 12+ &middot; native swift &middot; free &middot; no account</span>
     </div>
 
-    <details class="install-note">
-      <summary>macos says "damaged" or won't open?</summary>
-      <p>the app isn't signed with an apple developer certificate. after dragging to applications, open terminal and run:<br><br><code>xattr -cr /Applications/FreeYourPet.app</code><br><br>then open it normally. you only need to do this once.</p>
-    </details>
   </section>
 
   <section class="quote">
     <div class="quote-text">your pet shouldn't be trapped inside a chat window.<br>free it. let it roam your actual desktop.</div>
   </section>
+
+  <details class="install-note" open>
+    <summary>macos says "damaged" or won't open?</summary>
+    <p>the app isn't signed with an apple developer certificate. after dragging to applications, open terminal and run:<br><br><code>xattr -cr /Applications/FreeYourPet.app</code><br><br>then open it normally. you only need to do this once.</p>
+  </details>
 
   <footer class="foot">
     free &amp; open source &middot; <a href="https://github.com/matteomekhail/FreeYourPet">source on github</a>

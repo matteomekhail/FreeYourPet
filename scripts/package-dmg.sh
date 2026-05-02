@@ -28,6 +28,15 @@ fi
 BUNDLED_COUNT=$(find "$PETS_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')
 echo "    $BUNDLED_COUNT pet(s) bundled"
 
+SIGN_ID="Developer ID Application: Matteo Mekhail (G724SAH69L)"
+
+echo "==> Signing app..."
+codesign --deep --force --options runtime \
+    --sign "$SIGN_ID" \
+    "$APP_DIR"
+codesign --verify --verbose "$APP_DIR"
+echo "    App signed and verified"
+
 echo "==> Creating DMG..."
 rm -rf "$DMG_DIR"
 mkdir -p "$DMG_DIR"
@@ -45,9 +54,20 @@ hdiutil create \
 
 rm -rf "$DMG_DIR"
 
+echo "==> Signing DMG..."
+codesign --force --sign "$SIGN_ID" "$DMG_PATH"
+
+echo "==> Notarizing..."
+xcrun notarytool submit "$DMG_PATH" \
+    --keychain-profile "notary" \
+    --wait
+
+echo "==> Stapling..."
+xcrun stapler staple "$DMG_PATH"
+
 DMG_SIZE=$(du -h "$DMG_PATH" | cut -f1 | tr -d ' ')
 echo ""
-echo "==> Done! DMG created at:"
+echo "==> Done! Signed & notarized DMG created at:"
 echo "    $DMG_PATH ($DMG_SIZE)"
 echo ""
 echo "    Customers open the DMG and drag FreeYourPet.app to Applications."

@@ -3,3 +3,6 @@ build/
 *.log
 *.dmg
 !site/FreeYourPet.dmg
+*.cer
+*.key
+*.certSigningRequest
