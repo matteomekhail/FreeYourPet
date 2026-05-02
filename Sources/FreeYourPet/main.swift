@@ -1156,7 +1156,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: - Update Check
 
-    private static let currentVersion = "0.1.0"
+    private static let currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
     private static let versionURL = URL(string: "https://freeyour.pet/version.json")!
 
     private func checkForUpdates() {
