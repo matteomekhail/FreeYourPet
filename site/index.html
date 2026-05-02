@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>alwayspet - free your pet from the codex jail</title>
+<meta name="description" content="Hatch a pet in ChatGPT with /hatch-pet, then let AlwaysPet keep it alive on your Mac forever.">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000;
+    --cream: #e8d8cc;
+    --cream-80: rgba(232,216,204,0.8);
+    --cream-60: rgba(232,216,204,0.6);
+    --cream-30: rgba(232,216,204,0.3);
+    --cream-20: rgba(232,216,204,0.2);
+    --cream-10: rgba(232,216,204,0.1);
+    --cream-05: rgba(232,216,204,0.05);
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+  }
+
+  /* grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* dot pattern */
+  .dots {
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(var(--cream) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---- NAV ---- */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--cream-10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0.6);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--cream);
+    text-decoration: none;
+  }
+
+  .nav-brand img {
+    width: 24px; height: 24px;
+    border-radius: 5px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 22px;
+  }
+
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--cream-60);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+
+  /* ---- HERO ---- */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    padding: 120px 0 80px;
+  }
+
+  .hero-kicker {
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+    color: var(--cream-60);
+    margin-bottom: 32px;
+    animation: f-up 0.7s ease both;
+  }
+
+  .hero-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 22px;
+    display: block;
+    margin: 0 auto 48px;
+    border: 1px solid var(--cream-20);
+    box-shadow: 0 20px 60px -16px rgba(0,0,0,0.8);
+    animation: f-up 0.7s ease 0.08s both;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .hero-icon:hover { transform: scale(1.06) rotate(-2deg); }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    line-height: 0.95;
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    animation: f-up 0.7s ease 0.14s both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .hero-desc {
+    font-size: 0.92rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--cream-60);
+    max-width: 420px;
+    margin: 0 auto 48px;
+    text-transform: lowercase;
+    animation: f-up 0.7s ease 0.22s both;
+  }
+
+  .hero-desc code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    color: var(--cream-80);
+    border: 1px solid var(--cream-20);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--cream-05);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    animation: f-up 0.7s ease 0.3s both;
+  }
+
+  .dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 44px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: lowercase;
+    letter-spacing: 2px;
+    color: var(--cream);
+    background: transparent;
+    border: 2px solid var(--cream);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .dl-btn:hover {
+    color: #000;
+    background: #fff;
+    border-color: #fff;
+    box-shadow: 0 8px 32px var(--cream-20);
+  }
+
+  .dl-btn:active { transform: scale(0.98); }
+
+  .dl-btn svg {
+    width: 16px; height: 16px;
+  }
+
+  .dl-meta {
+    font-size: 0.68rem;
+    color: var(--cream-30);
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+  }
+
+  /* ---- SCREENSHOT ---- */
+  .screenshot-wrap {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto 48px;
+    animation: f-up 0.7s ease 0.3s both;
+  }
+
+  .app-window {
+    border-radius: 14px;
+    border: 1px solid var(--cream-20);
+    overflow: hidden;
+    background: #1a1a1a;
+    box-shadow:
+      0 2px 0 var(--cream-05),
+      0 24px 64px -16px rgba(0,0,0,0.8);
+    transform: rotate(-3deg);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
+  }
+
+  .app-window:hover {
+    transform: rotate(0deg) translateY(-4px) scale(1.01);
+    box-shadow:
+      0 2px 0 var(--cream-05),
+      0 32px 80px -16px rgba(0,0,0,0.9),
+      0 0 80px -20px var(--cream-10);
+  }
+
+  .app-window-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: #0d0d0d;
+    border-bottom: 1px solid var(--cream-10);
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .screenshot {
+    width: 100%;
+    display: block;
+  }
+
+  /* ---- QUOTE ---- */
+  .quote {
+    text-align: center;
+    padding: 80px 0 100px;
+    animation: f-up 0.7s ease 0.38s both;
+  }
+
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    line-height: 1.7;
+    color: var(--cream-60);
+    text-transform: lowercase;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ---- FOOTER ---- */
+  .foot {
+    text-align: center;
+    padding: 24px 0 48px;
+    border-top: 1px solid var(--cream-10);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--cream-30);
+    animation: f-up 0.7s ease 0.44s both;
+  }
+
+  .foot a {
+    color: var(--cream-60);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .foot a:hover { color: var(--cream); }
+
+  @keyframes f-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 100px 0 60px; }
+    .hero-icon { width: 80px; height: 80px; border-radius: 18px; }
+    .dl-btn { padding: 16px 36px; }
+    .nav { padding: 14px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="dots"></div>
+
+<nav class="nav">
+  <a href="#" class="nav-brand">
+    <img src="icon.png" alt="">
+    alwayspet
+  </a>
+  <div class="nav-links">
+    <a href="https://github.com/matteomekhail/FreeYourPet">github</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <section class="hero">
+    <h1>free your pet<br>from the <em>codex jail</em></h1>
+    <p class="hero-desc">
+      hatch a pet in chatgpt with <code>/hatch-pet</code>, then let alwayspet keep it alive on your mac.<br>walking, waving, and jumping across your desktop. forever.
+    </p>
+    <div class="screenshot-wrap">
+      <div class="app-window">
+        <div class="app-window-bar">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+        </div>
+        <img class="screenshot" src="screenshot.png" alt="AlwaysPet app" width="1200">
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a class="dl-btn" href="AlwaysPet.dmg" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        download for macos
+      </a>
+      <span class="dl-meta">macos 12+ &middot; native swift &middot; free &middot; no account</span>
+    </div>
+  </section>
+
+  <section class="quote">
+    <div class="quote-text">your pet shouldn't be trapped inside a chat window.<br>free it. let it roam your actual desktop.</div>
+  </section>
+
+  <footer class="foot">
+    free &amp; open source &middot; <a href="https://github.com/matteomekhail/FreeYourPet">source on github</a>
+  </footer>
+
+</div>
+
+</body>
+</html>
