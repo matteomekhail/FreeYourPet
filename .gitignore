@@ -2,3 +2,4 @@ build/
 .DS_Store
 *.log
 *.dmg
+!site/FreeYourPet.dmg
