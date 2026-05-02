@@ -283,6 +283,58 @@
     display: block;
   }
 
+  /* ---- INSTALL NOTE ---- */
+  .install-note {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 24px;
+    border: 1px solid var(--cream-10);
+    border-radius: 10px;
+    background: var(--cream-05);
+    text-align: left;
+    animation: f-up 0.7s ease 0.36s both;
+  }
+
+  .install-note summary {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    color: var(--cream-60);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .install-note summary::-webkit-details-marker { display: none; }
+
+  .install-note summary::before {
+    content: '+ ';
+    color: var(--cream-30);
+  }
+
+  .install-note[open] summary::before {
+    content: '- ';
+  }
+
+  .install-note p {
+    margin-top: 14px;
+    font-size: 0.78rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--cream-60);
+  }
+
+  .install-note code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    color: var(--cream-80);
+    border: 1px solid var(--cream-20);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--cream-05);
+    user-select: all;
+  }
+
   /* ---- QUOTE ---- */
   .quote {
     text-align: center;
@@ -374,6 +426,11 @@
       </a>
       <span class="dl-meta">macos 12+ &middot; native swift &middot; free &middot; no account</span>
     </div>
+
+    <details class="install-note">
+      <summary>macos says "damaged" or won't open?</summary>
+      <p>the app isn't signed with an apple developer certificate. after dragging to applications, open terminal and run:<br><br><code>xattr -cr /Applications/FreeYourPet.app</code><br><br>then open it normally. you only need to do this once.</p>
+    </details>
   </section>
 
   <section class="quote">
