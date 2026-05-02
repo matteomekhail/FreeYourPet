@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -euo pipefail
 
-PLIST="$HOME/Library/LaunchAgents/local.alwayspet.plist"
+PLIST="$HOME/Library/LaunchAgents/pet.freeyour.app.plist"
 
 if [[ -f "$PLIST" ]]; then
   /bin/launchctl unload "$PLIST" >/dev/null 2>&1 || true

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-APP_NAME="AlwaysPet"
+APP_NAME="FreeYourPet"
 BUILD_DIR="$ROOT_DIR/build"
 APP_DIR="$BUILD_DIR/$APP_NAME.app"
 MACOS_DIR="$APP_DIR/Contents/MacOS"
@@ -11,7 +11,7 @@ RESOURCES_DIR="$APP_DIR/Contents/Resources"
 mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
 
 /usr/bin/swiftc \
-  "$ROOT_DIR/Sources/AlwaysPet/main.swift" \
+  "$ROOT_DIR/Sources/FreeYourPet/main.swift" \
   -O \
   -framework Cocoa \
   -o "$MACOS_DIR/$APP_NAME"
@@ -22,13 +22,13 @@ cat > "$APP_DIR/Contents/Info.plist" <<'PLIST'
 <plist version="1.0">
 <dict>
   <key>CFBundleExecutable</key>
-  <string>AlwaysPet</string>
+  <string>FreeYourPet</string>
   <key>CFBundleIdentifier</key>
-  <string>local.alwayspet</string>
+  <string>pet.freeyour.app</string>
   <key>CFBundleIconFile</key>
   <string>AppIcon</string>
   <key>CFBundleName</key>
-  <string>AlwaysPet</string>
+  <string>FreeYourPet</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>

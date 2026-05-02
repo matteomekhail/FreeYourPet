@@ -227,7 +227,7 @@ final class PetSpriteView: NSView {
         menu.addItem(withTitle("Jump", action: #selector(ctxJump), keyEquivalent: ""))
         menu.addItem(withTitle("Review", action: #selector(ctxReview), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(withTitle("Open AlwaysPet...", action: #selector(ctxOpen), keyEquivalent: ""))
+        menu.addItem(withTitle("Open freeyour.pet...", action: #selector(ctxOpen), keyEquivalent: ""))
         NSMenu.popUpContextMenu(menu, with: event, for: self)
     }
 
@@ -577,14 +577,14 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             backing: .buffered,
             defer: false
         )
-        window.title = "AlwaysPet"
+        window.title = "freeyour.pet"
         window.minSize = NSSize(width: 460, height: 420)
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
         window.backgroundColor = .clear
         window.isMovableByWindowBackground = true
-        window.setFrameAutosaveName("AlwaysPetMain")
-        if !window.setFrameUsingName("AlwaysPetMain") {
+        window.setFrameAutosaveName("FreeYourPetMain")
+        if !window.setFrameUsingName("FreeYourPetMain") {
             window.center()
         }
 
@@ -660,7 +660,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             .withSymbolicTraits(.bold),
             size: 28) ?? NSFont.systemFont(ofSize: 28, weight: .bold)
 
-        let titleLabel = NSTextField(labelWithString: "AlwaysPet")
+        let titleLabel = NSTextField(labelWithString: "freeyour.pet")
         titleLabel.font = titleFont
         titleLabel.textColor = .labelColor
 
@@ -753,7 +753,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         launchAtLoginButton.image = NSImage(systemSymbolName: "power", accessibilityDescription: "Launch at Login")
         launchAtLoginButton.imagePosition = .imageLeading
         launchAtLoginButton.title = "Launch at Login"
-        launchAtLoginButton.toolTip = "Automatically start AlwaysPet when you log in"
+        launchAtLoginButton.toolTip = "Automatically start freeyour.pet when you log in"
         launchAtLoginButton.target = self
         launchAtLoginButton.action = #selector(launchAtLoginToggled)
         launchAtLoginButton.controlSize = .regular
@@ -960,7 +960,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         if enable {
             Self.installLaunchAgent()
             if Self.isLaunchAgentInstalled() {
-                showToast("AlwaysPet will now start automatically when you log in.")
+                showToast("freeyour.pet will now start automatically when you log in.")
             } else {
                 launchAtLoginButton.state = .off
                 showError("Failed to install login agent", detail: "Could not write to ~/Library/LaunchAgents. Check disk permissions.")
@@ -968,7 +968,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         } else {
             Self.uninstallLaunchAgent()
             if !Self.isLaunchAgentInstalled() {
-                showToast("AlwaysPet will no longer start at login.")
+                showToast("freeyour.pet will no longer start at login.")
             } else {
                 launchAtLoginButton.state = .on
                 showError("Failed to remove login agent", detail: "Could not remove the launch agent file.")
@@ -1031,7 +1031,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
 
     private static let launchAgentPath: String = {
         let home = NSHomeDirectory()
-        return "\(home)/Library/LaunchAgents/local.alwayspet.plist"
+        return "\(home)/Library/LaunchAgents/pet.freeyour.app.plist"
     }()
 
     static func isLaunchAgentInstalled() -> Bool {
@@ -1039,7 +1039,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
     }
 
     private static func installLaunchAgent() {
-        let executablePath = Bundle.main.executablePath ?? Bundle.main.bundlePath + "/Contents/MacOS/AlwaysPet"
+        let executablePath = Bundle.main.executablePath ?? Bundle.main.bundlePath + "/Contents/MacOS/FreeYourPet"
         let bundleRoot = (Bundle.main.bundlePath as NSString).deletingLastPathComponent
         let plist = """
         <?xml version="1.0" encoding="UTF-8"?>
@@ -1047,7 +1047,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
         <plist version="1.0">
         <dict>
           <key>Label</key>
-          <string>local.alwayspet</string>
+          <string>pet.freeyour.app</string>
           <key>ProgramArguments</key>
           <array>
             <string>\(executablePath)</string>
@@ -1060,9 +1060,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate {
             <false/>
           </dict>
           <key>StandardOutPath</key>
-          <string>\(bundleRoot)/alwayspet.log</string>
+          <string>\(bundleRoot)/freeyourpet.log</string>
           <key>StandardErrorPath</key>
-          <string>\(bundleRoot)/alwayspet.err.log</string>
+          <string>\(bundleRoot)/freeyourpet.err.log</string>
         </dict>
         </plist>
         """
@@ -1171,7 +1171,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
             DispatchQueue.main.async {
                 let alert = NSAlert()
-                alert.messageText = "AlwaysPet \(latest) is available"
+                alert.messageText = "freeyour.pet \(latest) is available"
                 alert.informativeText = "You're running \(Self.currentVersion). Would you like to download the update?"
                 alert.alertStyle = .informational
                 alert.addButton(withTitle: "Download")
@@ -1232,7 +1232,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.toolTip = package.description
 
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Open AlwaysPet...", action: #selector(openMainWindow), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: "Open freeyour.pet...", action: #selector(openMainWindow), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Pause Wandering", action: #selector(toggleWandering(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Keep Above Windows", action: #selector(togglePinned(_:)), keyEquivalent: ""))
@@ -1246,7 +1246,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem(title: "Bigger", action: #selector(bigger), keyEquivalent: "+"))
         menu.addItem(NSMenuItem(title: "Center Pet", action: #selector(centerPet), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit AlwaysPet", action: #selector(quit), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Quit freeyour.pet", action: #selector(quit), keyEquivalent: "q"))
         statusItem.menu = menu
         updateMenuState()
     }
@@ -1507,7 +1507,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showStartupError(_ error: Error) {
         let alert = NSAlert()
-        alert.messageText = "AlwaysPet could not load your Codex pet"
+        alert.messageText = "freeyour.pet could not load your Codex pet"
         alert.informativeText = String(describing: error)
         alert.alertStyle = .critical
         alert.runModal()
@@ -1551,7 +1551,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         packages.sort { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
 
         guard !packages.isEmpty else {
-            throw NSError(domain: "AlwaysPet", code: 1, userInfo: [
+            throw NSError(domain: "FreeYourPet", code: 1, userInfo: [
                 NSLocalizedDescriptionKey: "No pets found. Install pets to ~/.codex/pets or bundle them in Resources/pets."
             ])
         }
@@ -1575,7 +1575,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let data = try Data(contentsOf: manifestURL)
         let raw = try JSONSerialization.jsonObject(with: data)
         guard let json = raw as? [String: Any] else {
-            throw NSError(domain: "AlwaysPet", code: 2, userInfo: [
+            throw NSError(domain: "FreeYourPet", code: 2, userInfo: [
                 NSLocalizedDescriptionKey: "Invalid pet.json at \(manifestURL.path)."
             ])
         }
@@ -1587,7 +1587,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let spritesheet = folder.appendingPathComponent(spritesheetPath)
 
         guard FileManager.default.fileExists(atPath: spritesheet.path) else {
-            throw NSError(domain: "AlwaysPet", code: 3, userInfo: [
+            throw NSError(domain: "FreeYourPet", code: 3, userInfo: [
                 NSLocalizedDescriptionKey: "Missing spritesheet at \(spritesheet.path)."
             ])
         }
@@ -1604,14 +1604,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     static func loadAtlas(from url: URL) throws -> CGImage {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
-            throw NSError(domain: "AlwaysPet", code: 4, userInfo: [
+            throw NSError(domain: "FreeYourPet", code: 4, userInfo: [
                 NSLocalizedDescriptionKey: "Could not decode spritesheet at \(url.path)."
             ])
         }
 
         guard image.width == PetSpriteView.cellWidth * PetSpriteView.columns,
               image.height == PetSpriteView.cellHeight * PetSpriteView.rows else {
-            throw NSError(domain: "AlwaysPet", code: 5, userInfo: [
+            throw NSError(domain: "FreeYourPet", code: 5, userInfo: [
                 NSLocalizedDescriptionKey: "Spritesheet has size \(image.width)x\(image.height), expected 1536x1872."
             ])
         }

@@ -2,8 +2,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-APP_EXECUTABLE="$ROOT_DIR/build/AlwaysPet.app/Contents/MacOS/AlwaysPet"
-PLIST="$HOME/Library/LaunchAgents/local.alwayspet.plist"
+APP_EXECUTABLE="$ROOT_DIR/build/FreeYourPet.app/Contents/MacOS/FreeYourPet"
+PLIST="$HOME/Library/LaunchAgents/pet.freeyour.app.plist"
 
 "$ROOT_DIR/scripts/build.sh"
 mkdir -p "$HOME/Library/LaunchAgents"
@@ -14,7 +14,7 @@ cat > "$PLIST" <<PLIST
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>local.alwayspet</string>
+  <string>pet.freeyour.app</string>
   <key>ProgramArguments</key>
   <array>
     <string>$APP_EXECUTABLE</string>
@@ -27,9 +27,9 @@ cat > "$PLIST" <<PLIST
     <false/>
   </dict>
   <key>StandardOutPath</key>
-  <string>$ROOT_DIR/build/alwayspet.log</string>
+  <string>$ROOT_DIR/build/freeyourpet.log</string>
   <key>StandardErrorPath</key>
-  <string>$ROOT_DIR/build/alwayspet.err.log</string>
+  <string>$ROOT_DIR/build/freeyourpet.err.log</string>
 </dict>
 </plist>
 PLIST
@@ -38,4 +38,4 @@ PLIST
 /bin/launchctl load "$PLIST"
 
 echo "Installed login agent: $PLIST"
-echo "AlwaysPet will start now and again whenever you log in."
+echo "FreeYourPet will start now and again whenever you log in."

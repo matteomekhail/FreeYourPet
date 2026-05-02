@@ -2,9 +2,9 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-APP_DIR="$ROOT_DIR/build/AlwaysPet.app"
+APP_DIR="$ROOT_DIR/build/FreeYourPet.app"
 DMG_DIR="$ROOT_DIR/build/dmg"
-DMG_PATH="$ROOT_DIR/build/AlwaysPet.dmg"
+DMG_PATH="$ROOT_DIR/build/FreeYourPet.dmg"
 RESOURCES_DIR="$APP_DIR/Contents/Resources"
 PETS_DIR="$RESOURCES_DIR/pets"
 
@@ -37,7 +37,7 @@ ln -s /Applications "$DMG_DIR/Applications"
 
 rm -f "$DMG_PATH"
 hdiutil create \
-    -volname "AlwaysPet" \
+    -volname "FreeYourPet" \
     -srcfolder "$DMG_DIR" \
     -ov \
     -format UDZO \
@@ -50,4 +50,4 @@ echo ""
 echo "==> Done! DMG created at:"
 echo "    $DMG_PATH ($DMG_SIZE)"
 echo ""
-echo "    Customers open the DMG and drag AlwaysPet.app to Applications."
+echo "    Customers open the DMG and drag FreeYourPet.app to Applications."
